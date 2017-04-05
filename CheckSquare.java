@@ -11,9 +11,10 @@ public class CheckSquare
 {
 	public static void main(String[] args)
 	{
-		float[][] points = getPointsFromInput();
+		double[][] points = getPointsFromInput();
 		
 		// Print the four points to make sure input was captured correctly
+		System.out.print("\n");
 		for (int i=0; i<points.length; i++) {
 			System.out.println("Point #" + (i+1) + ": (" + points[i][0] + " , " + points[i][1] + ")");
 		}
@@ -25,11 +26,11 @@ public class CheckSquare
 	 *
 	 * Function which gathers user input from the console for the points that will be looked at
 	 */
-	public static float[][] getPointsFromInput()
+	public static double[][] getPointsFromInput()
 	{
 		Scanner scanner = new Scanner(System.in);
 		
-		float[][] points = new float[4][2];
+		double[][] points = new double[4][2];
 		
 		for (int i=0; i<points.length; i++) 
 		{
@@ -51,13 +52,13 @@ public class CheckSquare
 				
 				try
 				{
-					points[i][0] = Float.parseFloat(pair[0]);
-					points[i][1] = Float.parseFloat(pair[1]);
+					points[i][0] = Double.parseDouble(pair[0]);
+					points[i][1] = Double.parseDouble(pair[1]);
 					gettingInputI = false;
 				}
 				catch (NumberFormatException e)
 				{
-					System.out.println("Please make sure comma separated values are proper float numbers");
+					System.out.println("Please make sure comma separated values are proper double numbers");
 				}
 			}
 		}
