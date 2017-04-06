@@ -61,6 +61,14 @@ public class CheckSquare
 			System.out.println("Projected Point #" + (i+1) + ": (" + projectedPoints[i][0] + " , " + projectedPoints[i][1] + ")");
 		}
 		
+		// Print final result of comparison
+		System.out.println("");
+		if (checkForMatchingPoints(points, projectedPoints)) {
+			System.out.println("Points form a square! :)");
+		} else {
+			System.out.println("Points do not form a square");
+		}
+		
 	}
 	
 	/**
