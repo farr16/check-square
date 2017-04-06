@@ -20,7 +20,31 @@ public class CheckSquare
 			System.out.println("Point #" + (i+1) + ": (" + points[i][0] + " , " + points[i][1] + ")");
 		}
 		
-		computePointDistances(points);
+		Double[] distances = computePointDistances(points);
+		for (int i=0; i<distances.length; i++) {
+			System.out.println("Distance from Point #1 to Point #" + (i+2) + " = " + distances[i]);
+		}
+		
+		int sideIdx, hypoTestIdx;
+		if (distances[0].compareTo(distances[1]) == 0) 
+		{
+			sideIdx = 0;
+			hypoTestIdx = 2;
+			System.out.println("Edge from point#1 to point#2 and edge from point#1 to point#3 are equal in length");
+		} else if (distances[0].compareTo(distances[2]) == 0) 
+		{
+			sideIdx = 0;
+			hypoTestIdx = 1;
+			System.out.println("Edge from point#1 to point#2 and edge from point#1 to point#4 are equal in length");
+		}
+		else if (distances[1].compareTo(distances[2]) == 0) {
+			sideIdx = 1;
+			hypoTestIdx = 0;
+			System.out.println("Edge from point#1 to point#3 and edge from point#1 to point#4 are equal in length");
+		} else {
+			System.out.println("Points fail test #1, points do not form the corners of a square.");
+			System.exit(0);
+		}
 	}
 	
 	/**
@@ -87,15 +111,19 @@ public class CheckSquare
 	 *
 	 * Test method which prints out the distances between points
 	 */
-	private static void computePointDistances(double[][] points)
+	private static Double[] computePointDistances(double[][] points)
 	{
 		double firstX = points[0][0];
 		double firstY = points[0][1];
 		System.out.print("\n");
+		
 		double distance = 0d;
+		Double[] distances = new Double[3];
 		for (int i=1; i<points.length; i++) {
 			distance = getDistance(firstX, firstY, points[i][0], points[i][1]);
-			System.out.println("Distance from point #1 to point #" + (i+1) + " = " + distance );
+			distances[i-1] = distance;
 		}
+		
+		return distances;
 	}
 }
