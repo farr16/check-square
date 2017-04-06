@@ -41,7 +41,7 @@ public class CheckSquare
 		// This check is used to detect the case where all four points are the same
 		// point, which passes the rest of the logic but does not form a square
 		if(checkDoubleEquals(v[0], 0.0d) && checkDoubleEquals(v[1], 0.0d)) {
-			System.out.println("Points do not form a square.");
+			System.out.println("\nPoints do not form a square.");
 			System.exit(0);
 		}
 		
