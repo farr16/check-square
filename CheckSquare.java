@@ -113,4 +113,33 @@ public class CheckSquare
 		return Math.abs(first-second) < EPSILON;
 	}
 	
+	/**
+	 * checkForMatchingPoints
+	 *
+	 * Takes in an array of four points that are to be tested to see if they form the corners of a square
+	 * and another array of points that are projected based on a square with corner at the first point with
+	 * the same center as the center of the array of points, tell if the other points match and thus form 
+	 * a square
+	 */
+	private static boolean checkForMatchingPoints(double[][] points, double[][] projPoints) 
+	{
+		for(int i=0; i<projPoints.length; i++) 
+		{
+			boolean match = false;
+			double projX = projPoints[i][0];
+			double projY = projPoints[i][1];
+			for(int j=1; j<points.length; j++)
+			{
+				if (checkDoubleEquals(projX, points[j][0]) && checkDoubleEquals(projY,points[j][1]) ) 
+				{
+					match = true;
+				}
+			}
+			if (!match)
+				return false;
+		}
+		
+		return true;
+	}
+	
 }
