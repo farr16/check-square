@@ -10,6 +10,9 @@ import java.lang.Math;
  */
 public class CheckSquare
 {
+	
+	private static final double EPSILON = 0.0000000001d;
+	
 	public static void main(String[] args)
 	{
 		double[][] points = getPointsFromInput();
@@ -52,6 +55,7 @@ public class CheckSquare
 		projectedPoints[2][1] = centerY - v2[1];
 		
 		// Print out projected points
+		System.out.println("");
 		for (int i=0; i<projectedPoints.length; i++) 
 		{
 			System.out.println("Projected Point #" + (i+1) + ": (" + projectedPoints[i][0] + " , " + projectedPoints[i][1] + ")");
@@ -102,6 +106,11 @@ public class CheckSquare
 		}
 		
 		return points;
+	}
+	
+	private static boolean checkDoubleEquals(double first, double second) 
+	{
+		return Math.abs(first-second) < EPSILON;
 	}
 	
 }
