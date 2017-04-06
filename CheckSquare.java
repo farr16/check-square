@@ -10,84 +10,65 @@ import java.lang.Math;
  */
 public class CheckSquare
 {
+	
+	private static final double EPSILON = 0.0000000001d;
+	
 	public static void main(String[] args)
 	{
 		double[][] points = getPointsFromInput();
 		
-		// Print the four points to make sure input was captured correctly
+		// Sum up each of the coordinates in order to calculate their center, printing out each point while
+		// doing so
+		double sumX, sumY;
+		sumX = sumY = 0;
 		System.out.print("\n");
 		for (int i=0; i<points.length; i++) 
 		{
 			System.out.println("Point #" + (i+1) + ": (" + points[i][0] + " , " + points[i][1] + ")");
+			sumX += points[i][0];
+			sumY += points[i][1];
 		}
 		
-		Double[] distances = computePointDistances(points);
-		for (int i=0; i<distances.length; i++) 
+		double centerX = sumX/4.0d;
+		double centerY = sumY/4.0d;
+		
+		// Create a vector v = Point1 - Center;
+		double[] v = new double[2];
+		v[0] = points[0][0] - centerX;
+		v[1] = points[0][1] - centerY;
+		
+		// Create a vector that is v rotated by 90 degrees
+		double[] v2 = new double[2];
+		v2[0] = -1.0d * v[1];
+		v2[1] = v[0];
+		
+		// Create points which would match the square's other points
+		double[][] projectedPoints = new double[3][2];
+		// projected point 1 = center - v
+		projectedPoints[0][0] = centerX - v[0];
+		projectedPoints[0][1] = centerY - v[1];
+		// projected point 2 = center + v2
+		projectedPoints[1][0] = centerX + v2[0];
+		projectedPoints[1][1] = centerY + v2[1];
+		// projected point 3 = center - v2;
+		projectedPoints[2][0] = centerX - v2[0];
+		projectedPoints[2][1] = centerY - v2[1];
+		
+		// Print out projected points
+		System.out.println("");
+		for (int i=0; i<projectedPoints.length; i++) 
 		{
-			System.out.println("Distance from Point #1 to Point #" + (i+2) + " = " + distances[i]);
+			System.out.println("Projected Point #" + (i+1) + ": (" + projectedPoints[i][0] + " , " + projectedPoints[i][1] + ")");
 		}
 		
-		int sideIdx, hypoTestIdx, pointAIdx, pointBIdx, pointCIdx;
-		sideIdx = hypoTestIdx = pointAIdx = pointBIdx = pointCIdx = -1;
-		if (distances[0].compareTo(distances[1]) == 0) 
-		{
-			sideIdx = 0;
-			hypoTestIdx = 2;
-			pointAIdx = 3;
-			pointBIdx = 1;
-			pointCIdx = 2;
-			
-			System.out.println("Edge from point#1 to point#2 and edge from point#1 to point#3 are equal in length");
-		} else if (distances[0].compareTo(distances[2]) == 0) 
-		{
-			sideIdx = 0;
-			hypoTestIdx = 1;
-			pointAIdx = 2;
-			pointBIdx = 1;
-			pointCIdx = 3;
-			
-			System.out.println("Edge from point#1 to point#2 and edge from point#1 to point#4 are equal in length");
-		}
-		else if (distances[1].compareTo(distances[2]) == 0) 
-		{
-			sideIdx = 1;
-			hypoTestIdx = 0;
-			pointAIdx = 1;
-			pointBIdx = 2;
-			pointCIdx = 3;
-			System.out.println("Edge from point#1 to point#3 and edge from point#1 to point#4 are equal in length");
-		} else 
-		{
-			System.out.println("Points fail test #1, points do not form the corners of a square.");
-			System.exit(0);
+		// Print final result of comparison
+		System.out.println("");
+		if (checkForMatchingPoints(points, projectedPoints)) {
+			System.out.println("Points form a square! :)");
+		} else {
+			System.out.println("Points do not form a square");
 		}
 		
-		double sideDist = distances[sideIdx];
-		
-		// Test if the hypotenuse distance is the expected length given the length of the sides
-		// NOTE: This calculation only seems to be precise enough for non-rotated squares
-		if (distances[hypoTestIdx].compareTo(sideDist * Math.sqrt(2)) == 0) 
-		{
-			System.out.println("Hypotenuse distance is correct!");
-		} else 
-		{
-			System.out.println("Hypotenuse distance is incorrect!");
-			System.exit(0);
-		}
-		
-		double side1Dist = getDistance(points[pointAIdx][0], points[pointBIdx][0], points[pointAIdx][1], points[pointBIdx][1]);
-		double side2Dist = getDistance(points[pointAIdx][0], points[pointCIdx][0], points[pointAIdx][1], points[pointCIdx][1]);
-		
-		if (distances[sideIdx].compareTo(side1Dist) != 0) {
-			System.out.println("Side lengths not equal! Points do not form a square.");
-			System.exit(0);
-		}
-		if (distances[sideIdx].compareTo(side2Dist) != 0) {
-			System.out.println("Side lengths not equal! Points do not form a square.");
-			System.exit(0);
-		}
-		
-		System.out.println("Points do form a square :)");
 	}
 	
 	/**
@@ -135,38 +116,38 @@ public class CheckSquare
 		return points;
 	}
 	
-	/**
-	 * getDistance
-	 *
-	 * Method which computes the distance between two points
-	 */
-	private static double getDistance(double x1, double y1, double x2, double y2) 
-	{	
-		double xDist = x1 - x2;
-		double yDist = y1 - y2;
-		double dist = Math.sqrt(Math.pow(xDist, 2)+ Math.pow(yDist, 2));
-		
-		return dist;
+	private static boolean checkDoubleEquals(double first, double second) 
+	{
+		return Math.abs(first-second) < EPSILON;
 	}
 	
 	/**
-	 * computePointDistances
+	 * checkForMatchingPoints
 	 *
-	 * Test method which prints out the distances between points
+	 * Takes in an array of four points that are to be tested to see if they form the corners of a square
+	 * and another array of points that are projected based on a square with corner at the first point with
+	 * the same center as the center of the array of points, tell if the other points match and thus form 
+	 * a square
 	 */
-	private static Double[] computePointDistances(double[][] points)
+	private static boolean checkForMatchingPoints(double[][] points, double[][] projPoints) 
 	{
-		double firstX = points[0][0];
-		double firstY = points[0][1];
-		System.out.print("\n");
-		
-		double distance = 0d;
-		Double[] distances = new Double[3];
-		for (int i=1; i<points.length; i++) {
-			distance = getDistance(firstX, firstY, points[i][0], points[i][1]);
-			distances[i-1] = distance;
+		for(int i=0; i<projPoints.length; i++) 
+		{
+			boolean match = false;
+			double projX = projPoints[i][0];
+			double projY = projPoints[i][1];
+			for(int j=1; j<points.length; j++)
+			{
+				if (checkDoubleEquals(projX, points[j][0]) && checkDoubleEquals(projY,points[j][1]) ) 
+				{
+					match = true;
+				}
+			}
+			if (!match)
+				return false;
 		}
 		
-		return distances;
+		return true;
 	}
+	
 }
