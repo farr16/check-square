@@ -16,16 +16,19 @@ public class CheckSquare
 		
 		// Print the four points to make sure input was captured correctly
 		System.out.print("\n");
-		for (int i=0; i<points.length; i++) {
+		for (int i=0; i<points.length; i++) 
+		{
 			System.out.println("Point #" + (i+1) + ": (" + points[i][0] + " , " + points[i][1] + ")");
 		}
 		
 		Double[] distances = computePointDistances(points);
-		for (int i=0; i<distances.length; i++) {
+		for (int i=0; i<distances.length; i++) 
+		{
 			System.out.println("Distance from Point #1 to Point #" + (i+2) + " = " + distances[i]);
 		}
 		
 		int sideIdx, hypoTestIdx;
+		sideIdx = hypoTestIdx = -1;
 		if (distances[0].compareTo(distances[1]) == 0) 
 		{
 			sideIdx = 0;
@@ -37,12 +40,25 @@ public class CheckSquare
 			hypoTestIdx = 1;
 			System.out.println("Edge from point#1 to point#2 and edge from point#1 to point#4 are equal in length");
 		}
-		else if (distances[1].compareTo(distances[2]) == 0) {
+		else if (distances[1].compareTo(distances[2]) == 0) 
+		{
 			sideIdx = 1;
 			hypoTestIdx = 0;
 			System.out.println("Edge from point#1 to point#3 and edge from point#1 to point#4 are equal in length");
-		} else {
+		} else 
+		{
 			System.out.println("Points fail test #1, points do not form the corners of a square.");
+			System.exit(0);
+		}
+		
+		// Test if the hypotenuse distance is the expected length given the length of the sides
+		// NOTE: This calculation only seems to be precise enough for non-rotated squares
+		if (distances[hypoTestIdx].compareTo(distances[sideIdx] * Math.sqrt(2)) == 0) 
+		{
+			System.out.println("Hypotenuse distance is correct!");
+		} else 
+		{
+			System.out.println("Hypotenuse distance is incorrect!");
 			System.exit(0);
 		}
 	}
