@@ -37,6 +37,14 @@ public class CheckSquare
 		v[0] = points[0][0] - centerX;
 		v[1] = points[0][1] - centerY;
 		
+		// Reject case where the center point is equal to the first point
+		// This check is used to detect the case where all four points are the same
+		// point, which passes the rest of the logic but does not form a square
+		if(checkDoubleEquals(v[0], 0.0d) && checkDoubleEquals(v[1], 0.0d)) {
+			System.out.println("Points do not form a square.");
+			System.exit(0);
+		}
+		
 		// Create a vector that is v rotated by 90 degrees
 		double[] v2 = new double[2];
 		v2[0] = -1.0d * v[1];
@@ -66,7 +74,7 @@ public class CheckSquare
 		if (checkForMatchingPoints(points, projectedPoints)) {
 			System.out.println("Points form a square! :)");
 		} else {
-			System.out.println("Points do not form a square");
+			System.out.println("Points do not form a square.");
 		}
 		
 	}
