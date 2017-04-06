@@ -27,23 +27,34 @@ public class CheckSquare
 			System.out.println("Distance from Point #1 to Point #" + (i+2) + " = " + distances[i]);
 		}
 		
-		int sideIdx, hypoTestIdx;
-		sideIdx = hypoTestIdx = -1;
+		int sideIdx, hypoTestIdx, pointAIdx, pointBIdx, pointCIdx;
+		sideIdx = hypoTestIdx = pointAIdx = pointBIdx = pointCIdx = -1;
 		if (distances[0].compareTo(distances[1]) == 0) 
 		{
 			sideIdx = 0;
 			hypoTestIdx = 2;
+			pointAIdx = 3;
+			pointBIdx = 1;
+			pointCIdx = 2;
+			
 			System.out.println("Edge from point#1 to point#2 and edge from point#1 to point#3 are equal in length");
 		} else if (distances[0].compareTo(distances[2]) == 0) 
 		{
 			sideIdx = 0;
 			hypoTestIdx = 1;
+			pointAIdx = 2;
+			pointBIdx = 1;
+			pointCIdx = 3;
+			
 			System.out.println("Edge from point#1 to point#2 and edge from point#1 to point#4 are equal in length");
 		}
 		else if (distances[1].compareTo(distances[2]) == 0) 
 		{
 			sideIdx = 1;
 			hypoTestIdx = 0;
+			pointAIdx = 1;
+			pointBIdx = 2;
+			pointCIdx = 3;
 			System.out.println("Edge from point#1 to point#3 and edge from point#1 to point#4 are equal in length");
 		} else 
 		{
@@ -51,9 +62,11 @@ public class CheckSquare
 			System.exit(0);
 		}
 		
+		double sideDist = distances[sideIdx];
+		
 		// Test if the hypotenuse distance is the expected length given the length of the sides
 		// NOTE: This calculation only seems to be precise enough for non-rotated squares
-		if (distances[hypoTestIdx].compareTo(distances[sideIdx] * Math.sqrt(2)) == 0) 
+		if (distances[hypoTestIdx].compareTo(sideDist * Math.sqrt(2)) == 0) 
 		{
 			System.out.println("Hypotenuse distance is correct!");
 		} else 
@@ -61,6 +74,20 @@ public class CheckSquare
 			System.out.println("Hypotenuse distance is incorrect!");
 			System.exit(0);
 		}
+		
+		double side1Dist = getDistance(points[pointAIdx][0], points[pointBIdx][0], points[pointAIdx][1], points[pointBIdx][1]);
+		double side2Dist = getDistance(points[pointAIdx][0], points[pointCIdx][0], points[pointAIdx][1], points[pointCIdx][1]);
+		
+		if (distances[sideIdx].compareTo(side1Dist) != 0) {
+			System.out.println("Side lengths not equal! Points do not form a square.");
+			System.exit(0);
+		}
+		if (distances[sideIdx].compareTo(side2Dist) != 0) {
+			System.out.println("Side lengths not equal! Points do not form a square.");
+			System.exit(0);
+		}
+		
+		System.out.println("Points do form a square :)");
 	}
 	
 	/**
